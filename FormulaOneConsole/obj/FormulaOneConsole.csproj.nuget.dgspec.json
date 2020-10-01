@@ -1,21 +1,26 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Utente\\Desktop\\FormulaOneSolution\\FormulaOneConsole\\FormulaOneConsole.csproj": {}
+    "C:\\Users\\n.mina.1018\\Desktop\\formula-one-MinaNicolo\\FormulaOneConsole\\FormulaOneConsole.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Utente\\Desktop\\FormulaOneSolution\\FormulaOneConsole\\FormulaOneConsole.csproj": {
+    "C:\\Users\\n.mina.1018\\Desktop\\formula-one-MinaNicolo\\FormulaOneConsole\\FormulaOneConsole.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Utente\\Desktop\\FormulaOneSolution\\FormulaOneConsole\\FormulaOneConsole.csproj",
+        "projectUniqueName": "C:\\Users\\n.mina.1018\\Desktop\\formula-one-MinaNicolo\\FormulaOneConsole\\FormulaOneConsole.csproj",
         "projectName": "FormulaOneConsole",
-        "projectPath": "C:\\Users\\Utente\\Desktop\\FormulaOneSolution\\FormulaOneConsole\\FormulaOneConsole.csproj",
-        "packagesPath": "C:\\Users\\Utente\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Utente\\Desktop\\FormulaOneSolution\\FormulaOneConsole\\obj\\",
+        "projectPath": "C:\\Users\\n.mina.1018\\Desktop\\formula-one-MinaNicolo\\FormulaOneConsole\\FormulaOneConsole.csproj",
+        "packagesPath": "C:\\Users\\n.mina.1018\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\n.mina.1018\\Desktop\\formula-one-MinaNicolo\\FormulaOneConsole\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Utente\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\n.mina.1018\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.0"
@@ -37,6 +42,12 @@
       },
       "frameworks": {
         "netcoreapp3.0": {
+          "dependencies": {
+            "System.Data.SqlClient": {
+              "target": "Package",
+              "version": "[4.8.2, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
