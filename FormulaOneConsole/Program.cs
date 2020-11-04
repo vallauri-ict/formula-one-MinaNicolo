@@ -7,7 +7,8 @@ namespace FormulaOneConsole
     class Program
     {
         public const string WORKINGPATH = @"C:\data\formulaone\";
-        private const string CONNECTION_STRING = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + WORKINGPATH + @"FormulaOne.mdf;Integrated Security=True";
+        private static string DB_PATH = System.Environment.CurrentDirectory;
+        private const string RESTORE_CONNECTION_STRING = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + WORKINGPATH + @"FormulaOne.mdf;Integrated Security=True";
         static void Main(string[] args)
         {
             char scelta = ' ';
@@ -17,8 +18,11 @@ namespace FormulaOneConsole
                 Console.WriteLine("1 - Create Countries");
                 Console.WriteLine("2 - Create Teams");
                 Console.WriteLine("3 - Create Drivers");
+                Console.WriteLine("4 - Create Constraints");
                 Console.WriteLine("------------------");
-                Console.WriteLine("R - Reset DB");
+                Console.WriteLine("D - Drop DB");
+                Console.WriteLine("B - Backup all DB");
+                Console.WriteLine("R - Restore DB");
                 Console.WriteLine("------------------");
                 Console.WriteLine("X - EXIT\n");
                 scelta = Console.ReadKey(true).KeyChar;
@@ -33,9 +37,17 @@ namespace FormulaOneConsole
                     case '3':
                         callExecuteSqlScript("Drivers");
                         break;
+                    case '4':
+                        callExecuteSqlScript("setConstraints");
+                        break;
+                    case 'B':
+                        Backup();
+                        break;
                     case 'R':
+                        Restore();
+                        break;
+                    case 'D':
                         bool OK;
-                        //System.IO.File.Copy(DbTools.WORKINGPATH + "FormulaOne.mdf", DbTools.WORKINGPATH + "Backup.mdf");
                         OK = callDropTable("Countries");
                         if (OK) OK = callDropTable("Teams");
                         if (OK) OK = callDropTable("Drivers");
@@ -43,15 +55,7 @@ namespace FormulaOneConsole
                         if (OK) OK = callExecuteSqlScript("Drivers");
                         if (OK) OK = callExecuteSqlScript("Teams");
                         if (OK)
-                        {
-                            //System.IO.File.Delete(DbTools.WORKINGPATH + "Backup.mdf");
                             Console.WriteLine("RESET DB OK");
-                        }
-                        else
-                        {
-                            //System.IO.File.Copy(DbTools.WORKINGPATH + "Backup.mdf", DbTools.WORKINGPATH + "FormulaOne.mdf", true);
-                            //System.IO.File.Delete(DbTools.WORKINGPATH + "Backup.mdf");
-                        }
                         break;
                     case 'X': break;
 
@@ -78,7 +82,7 @@ namespace FormulaOneConsole
         }
         private static void DropTable(string tableName)
         {
-            var con = new SqlConnection(CONNECTION_STRING);
+            var con = new SqlConnection(RESTORE_CONNECTION_STRING);
             var cmd = new SqlCommand("Drop Table " + tableName + ";", con);
             con.Open();
             try
@@ -116,7 +120,7 @@ namespace FormulaOneConsole
             fileContent = fileContent.Replace("\t", "");
             var sqlqueries = fileContent.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
 
-            var con = new SqlConnection(CONNECTION_STRING);
+            var con = new SqlConnection(RESTORE_CONNECTION_STRING);
             var cmd = new SqlCommand("query", con);
             con.Open(); int i = 0; int nErr = 0;
             foreach (var query in sqlqueries)
@@ -134,6 +138,76 @@ namespace FormulaOneConsole
             }
             string finalMessage = nErr == 0 ? "Script completed without error" : "Script completed with " + nErr + " ERRORS";
             con.Close();
+        }
+
+        private static void Backup()
+        {
+            try
+            {
+                using (SqlConnection dbConn = new SqlConnection())
+                {
+                    dbConn.ConnectionString = RESTORE_CONNECTION_STRING;
+                    dbConn.Open();
+
+                    using (SqlCommand multiuser_rollback_dbcomm = new SqlCommand())
+                    {
+                        multiuser_rollback_dbcomm.Connection = dbConn;
+                        multiuser_rollback_dbcomm.CommandText = @"ALTER DATABASE [" + DB_PATH + "] SET MULTI_USER WITH ROLLBACK IMMEDIATE";
+                        multiuser_rollback_dbcomm.ExecuteNonQuery();
+                    }
+                    dbConn.Close();
+                }
+
+                SqlConnection.ClearAllPools();
+
+                using (SqlConnection backupConn = new SqlConnection())
+                {
+                    backupConn.ConnectionString = RESTORE_CONNECTION_STRING;
+                    backupConn.Open();
+
+                    using (SqlCommand backupcomm = new SqlCommand())
+                    {
+                        backupcomm.Connection = backupConn;
+                        backupcomm.CommandText = @"BACKUP DATABASE [" + DB_PATH + "] TO DISK='" + DB_PATH + @"\prova.bak'";
+                        backupcomm.ExecuteNonQuery();
+                    }
+                    backupConn.Close();
+                }
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        private static void Restore()
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(RESTORE_CONNECTION_STRING))
+                {
+                    con.Open();
+                    string sqlStmt2 = string.Format(@"ALTER DATABASE [" + DB_PATH + "] SET SINGLE_USER WITH ROLLBACK IMMEDIATE");
+                    SqlCommand bu2 = new SqlCommand(sqlStmt2, con);
+                    bu2.ExecuteNonQuery();
+
+                    string sqlStmt3 = @"USE MASTER RESTORE DATABASE [" + DB_PATH + "] FROM DISK='" + DB_PATH + @"\prova.bak' WITH REPLACE;";
+                    SqlCommand bu3 = new SqlCommand(sqlStmt3, con);
+                    bu3.ExecuteNonQuery();
+
+                    string sqlStmt4 = string.Format(@"ALTER DATABASE [" + DB_PATH + "] SET MULTI_USER");
+                    SqlCommand bu4 = new SqlCommand(sqlStmt4, con);
+                    bu4.ExecuteNonQuery();
+
+                    Console.WriteLine("database restoration done successefully");
+                    con.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
         }
     }
 }
