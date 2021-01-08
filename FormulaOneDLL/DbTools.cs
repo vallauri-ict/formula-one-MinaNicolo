@@ -134,6 +134,7 @@ namespace FormulaOneDLL
         public static List<string> GetTables()
         {
             DataTable table = new DataTable();
+            List<string> ts = new List<string>();
             SqlConnection con = new SqlConnection(CONNECTION_STRING);
             string sql = "SELECT * FROM INFORMATION_SCHEMA.TABLES";
             SqlCommand cmd = new SqlCommand(sql, con);
@@ -141,8 +142,6 @@ namespace FormulaOneDLL
 
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             da.Fill(table);
-            List<string> ts = new List<string>();
-            ts.Add("-- Selezionare la tabella --");
             foreach (DataRow item in table.Rows)
             {
                 ts.Add((item["TABLE_NAME"].ToString()));

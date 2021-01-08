@@ -4,7 +4,7 @@ CREATE TABLE [dbo].[Team] (
 [teamChief] varchar(100) NOT NULL default '',
 [teamPowerUnit] varchar(100) NOT NULL default '',
 [teamBase] varchar(70) NOT NULL default '',
-[nationCode] char(2) NOT NULL default '',
+[countryCode] char(2) NOT NULL default '',
 [logo] varchar(512) NOT NULL ,
 [img] varchar(512) NOT NULL ,
 PRIMARY KEY ([teamCode])

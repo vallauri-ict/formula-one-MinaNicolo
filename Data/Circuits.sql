@@ -1,5 +1,5 @@
 CREATE TABLE [dbo].[Circuit] (
-[circuitID] char(5) NOT NULL default '',
+[circuitId] char(5) NOT NULL default '',
 [circuitName] varchar(70) NOT NULL default '',
 [circuitNation] char(2) NOT NULL default '',
 [turnNumber] int NOT NULL default '',

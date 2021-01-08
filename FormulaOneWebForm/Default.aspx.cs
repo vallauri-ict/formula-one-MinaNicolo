@@ -16,10 +16,9 @@ namespace FormulaOneWebForm
             {
                 // Inizializzazioni che vengono eseguite solo la prima volta
                 lblMessaggio.Text = "Selezionare una voce dalla lista";
-                List<string> names = DbTools.GetTables();
-                DropDownList1.DataSource = names;
+                List<string> Tablenames = DbTools.GetTables();
+                DropDownList1.DataSource = Tablenames;
                 DropDownList1.DataBind();
-                DropDownList1.Text = "";
             }
             else
             {
@@ -30,27 +29,8 @@ namespace FormulaOneWebForm
         protected void DropDownList1_SelectedIndexChanged1(object sender, EventArgs e)
         {
             DbTools dbt = new DbTools();
-            switch (DropDownList1.SelectedValue)
-            {
-                case "Countries":
-                    {
-                        GridViewTable.DataSource = dbt.GetData("Countries");
-                        GridViewTable.DataBind();
-                        break;
-                    }
-                case "Team":
-                    {
-                        GridViewTable.DataSource = dbt.GetData("Team");
-                        GridViewTable.DataBind();
-                        break;
-                    }
-                case "Driver":
-                    {
-                        GridViewTable.DataSource = dbt.GetData("Driver");
-                        GridViewTable.DataBind();
-                        break;
-                    }
-            }
+            GridViewTable.DataSource = dbt.GetData(DropDownList1.SelectedValue);
+            GridViewTable.DataBind();
         }
     }
 }
