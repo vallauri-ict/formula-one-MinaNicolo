@@ -14,6 +14,7 @@ namespace FormulaOneDLL
         public const string WORKINGPATH = @"C:\data\formulaone\";
         private static string DB_PATH = System.Environment.CurrentDirectory;
         private const string CONNECTION_STRING = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + WORKINGPATH + @"FormulaOne.mdf;Integrated Security=True";
+        private static string DB_NAME = @"C:\data\formulaone\FormulaOne.mdf";
 
         public DbTools() { }
 
@@ -72,7 +73,8 @@ namespace FormulaOneDLL
                     using (SqlCommand multiuser_rollback_dbcomm = new SqlCommand())
                     {
                         multiuser_rollback_dbcomm.Connection = dbConn;
-                        multiuser_rollback_dbcomm.CommandText = @"ALTER DATABASE [" + DB_PATH + "] SET MULTI_USER WITH ROLLBACK IMMEDIATE";
+                        multiuser_rollback_dbcomm.CommandText = @"ALTER DATABASE [" + WORKINGPATH + "FormulaOne.mdf] SET MULTI_USER WITH ROLLBACK IMMEDIATE";
+
                         multiuser_rollback_dbcomm.ExecuteNonQuery();
                     }
                     dbConn.Close();
@@ -87,9 +89,12 @@ namespace FormulaOneDLL
 
                     using (SqlCommand backupcomm = new SqlCommand())
                     {
+                        File.Delete(WORKINGPATH + "FormulaOne_Backup.bak");
                         backupcomm.Connection = backupConn;
-                        backupcomm.CommandText = @"BACKUP DATABASE [" + DB_PATH + "] TO DISK='" + DB_PATH + @"\prova.bak'";
+                        backupcomm.CommandText = @"BACKUP DATABASE [" + WORKINGPATH + "FormulaOne.mdf] TO DISK='" + WORKINGPATH + @"FormulaOne_Backup.bak'";
                         backupcomm.ExecuteNonQuery();
+
+                        Console.WriteLine("Backup database Success");
                     }
                     backupConn.Close();
                 }
@@ -97,6 +102,7 @@ namespace FormulaOneDLL
 
             catch (Exception ex)
             {
+                Console.WriteLine("Backup database Failed");
                 Console.WriteLine(ex.Message);
             }
         }
@@ -108,28 +114,28 @@ namespace FormulaOneDLL
                 using (SqlConnection con = new SqlConnection(CONNECTION_STRING))
                 {
                     con.Open();
-                    string sqlStmt2 = string.Format(@"ALTER DATABASE [" + DB_PATH + "] SET SINGLE_USER WITH ROLLBACK IMMEDIATE");
+                    string sqlStmt2 = string.Format(@"ALTER DATABASE [" + WORKINGPATH + "FormulaOne.mdf] SET SINGLE_USER WITH ROLLBACK IMMEDIATE");
                     SqlCommand bu2 = new SqlCommand(sqlStmt2, con);
                     bu2.ExecuteNonQuery();
 
-                    string sqlStmt3 = @"USE MASTER RESTORE DATABASE [" + DB_PATH + "] FROM DISK='" + DB_PATH + @"\prova.bak' WITH REPLACE;";
+                    string sqlStmt3 = @"USE MASTER RESTORE DATABASE [" + WORKINGPATH + "FormulaOne.mdf] FROM DISK='" + WORKINGPATH + @"FormulaOne_Backup.bak' WITH REPLACE;";
                     SqlCommand bu3 = new SqlCommand(sqlStmt3, con);
                     bu3.ExecuteNonQuery();
 
-                    string sqlStmt4 = string.Format(@"ALTER DATABASE [" + DB_PATH + "] SET MULTI_USER");
+                    string sqlStmt4 = string.Format(@"ALTER DATABASE [" + WORKINGPATH + "FormulaOne.mdf] SET MULTI_USER");
                     SqlCommand bu4 = new SqlCommand(sqlStmt4, con);
                     bu4.ExecuteNonQuery();
 
-                    Console.WriteLine("database restoration done successefully");
+                    Console.WriteLine("Restore database Success");
                     con.Close();
                 }
             }
             catch (Exception ex)
             {
+                Console.WriteLine("Restore database Failed");
                 Console.WriteLine(ex.ToString());
             }
         }
-
 
         public static List<string> GetTables()
         {

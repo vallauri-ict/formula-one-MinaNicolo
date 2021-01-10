@@ -14,7 +14,9 @@
         </div>
         <div>
             <asp:DropDownList ID="DropDownList1" runat="server" OnSelectedIndexChanged="DropDownList1_SelectedIndexChanged1" AutoPostBack="True"></asp:DropDownList>
-            <asp:GridView ID="GridViewTable" runat="server"></asp:GridView>
+            <asp:GridView ID="GridViewTable" runat="server">
+                
+            </asp:GridView>
         </div>
     </form>
 </body>
