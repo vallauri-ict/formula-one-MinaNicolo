@@ -12,9 +12,7 @@ namespace FormulaOneDLL
     public class DbTools
     {
         public const string WORKINGPATH = @"C:\data\formulaone\";
-        private static string DB_PATH = System.Environment.CurrentDirectory;
         private const string CONNECTION_STRING = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + WORKINGPATH + @"FormulaOne.mdf;Integrated Security=True";
-        private static string DB_NAME = @"C:\data\formulaone\FormulaOne.mdf";
 
         public DbTools() { }
 
@@ -48,8 +46,8 @@ namespace FormulaOneDLL
         }
         public void DropTable(string tableName)
         {
-            var con = new SqlConnection(CONNECTION_STRING);
-            var cmd = new SqlCommand("Drop Table " + tableName + ";", con);
+            SqlConnection con = new SqlConnection(CONNECTION_STRING);
+            SqlCommand cmd = new SqlCommand("DROP TABLE IF EXISTS " + tableName + ";", con);
             con.Open();
             try
             {
@@ -94,7 +92,7 @@ namespace FormulaOneDLL
                         backupcomm.CommandText = @"BACKUP DATABASE [" + WORKINGPATH + "FormulaOne.mdf] TO DISK='" + WORKINGPATH + @"FormulaOne_Backup.bak'";
                         backupcomm.ExecuteNonQuery();
 
-                        Console.WriteLine("Backup database Success");
+                        Console.WriteLine("Backup database Success\n");
                     }
                     backupConn.Close();
                 }
@@ -102,7 +100,7 @@ namespace FormulaOneDLL
 
             catch (Exception ex)
             {
-                Console.WriteLine("Backup database Failed");
+                Console.WriteLine("Backup database Failed\n");
                 Console.WriteLine(ex.Message);
             }
         }
@@ -126,13 +124,13 @@ namespace FormulaOneDLL
                     SqlCommand bu4 = new SqlCommand(sqlStmt4, con);
                     bu4.ExecuteNonQuery();
 
-                    Console.WriteLine("Restore database Success");
+                    Console.WriteLine("Restore database Success\n");
                     con.Close();
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Restore database Failed");
+                Console.WriteLine("Restore database Failed\n");
                 Console.WriteLine(ex.ToString());
             }
         }

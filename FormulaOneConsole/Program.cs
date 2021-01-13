@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.IO;
+using System.Threading;
 using FormulaOneDLL;
 
 namespace FormulaOneConsole
@@ -12,9 +13,11 @@ namespace FormulaOneConsole
         private const string RESTORE_CONNECTION_STRING = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + WORKINGPATH + @"FormulaOne.mdf;Integrated Security=True";
 
         static DbTools dbt = new DbTools();
+
         static void Main(string[] args)
         {
             char scelta = ' ';
+            bool constraints = false;
             do
             {
                 Console.WriteLine("*** FORMULA ONE - BATCH OPERATIONS ***");
@@ -54,28 +57,44 @@ namespace FormulaOneConsole
                         callExecuteSqlScript("Results");
                         break;
                     case '7':
-                        callExecuteSqlScript("setConstraints");
+                        if (!constraints)
+                        {
+                            constraints = true;
+                            callExecuteSqlScript("setConstraints");
+                        }
+                        else
+                            Console.WriteLine("\nConstraints are already set\n");
                         break;
                     case '8':
+                        if (constraints)
+                        {
+                            constraints = false;
                             callExecuteSqlScript("deleteConstraints");
-                            break;
+                        }
+                        else
+                            Console.WriteLine("\nThere aren't constraints set\n");
+                        break;
                     case 'B':
+                    case 'b':
                         dbt.Backup();
                         break;
                     case 'T':
+                    case 't':
                         dbt.Restore();
                         break;
                     case 'R':
+                    case 'r':
                         bool OK;
-                            
-                        OK = callDropTable("deleteConstraints");
-                        if (OK) OK = callDropTable("setConstraints");
-                        if (OK) OK = callDropTable("Countries");
-                        if (OK) OK = callDropTable("Teams");
-                        if (OK) OK = callDropTable("Drivers");
-                        if (OK) OK = callDropTable("Circuits");
-                        if (OK) OK = callDropTable("Races");
-                        if (OK) OK = callDropTable("Results");
+
+                        if (constraints)
+                            callDropTable("deleteConstraints");
+
+                        OK = callDropTable("Countries");
+                        if (OK) OK = callDropTable("Team");
+                        if (OK) OK = callDropTable("Driver");
+                        if (OK) OK = callDropTable("Circuit");
+                        if (OK) OK = callDropTable("Race");
+                        if (OK) OK = callDropTable("Result");
 
                         if (OK) OK = callExecuteSqlScript("Countries");
                         if (OK) OK = callExecuteSqlScript("Teams");
@@ -83,7 +102,11 @@ namespace FormulaOneConsole
                         if (OK) OK = callExecuteSqlScript("Circuits");
                         if (OK) OK = callExecuteSqlScript("Races");
                         if (OK) OK = callExecuteSqlScript("Results");
-                        if (OK) OK = callExecuteSqlScript("setConstraints");
+                        if (OK)
+                        { 
+                            OK = callExecuteSqlScript("setConstraints");
+                            constraints = true;
+                        }
                         if (OK)
                             Console.WriteLine("RESET DB OK");
                         break;
@@ -95,6 +118,7 @@ namespace FormulaOneConsole
                 }
             } while (scelta != 'X' && scelta != 'x');
         }
+
 
         static bool callDropTable(string tableName)
         {

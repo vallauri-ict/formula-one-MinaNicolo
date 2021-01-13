@@ -26,7 +26,7 @@ namespace FormulaOneWebForm
             }
         }
 
-        protected void DropDownList1_SelectedIndexChanged1(object sender, EventArgs e)
+        protected void DropDownList1_SelectedIndexChanged(object sender, EventArgs e)
         {
             DbTools dbt = new DbTools();
             GridViewTable.DataSource = dbt.GetData(DropDownList1.SelectedValue);
