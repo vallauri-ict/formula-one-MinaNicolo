@@ -33,6 +33,7 @@ namespace FormulaOneConsole
                 Console.WriteLine("R - RESET DB");
                 Console.WriteLine("B - Backup all DB");
                 Console.WriteLine("T - Restore DB");
+                Console.WriteLine("C - CLEAR DB");
                 Console.WriteLine("------------------");
                 Console.WriteLine("X - EXIT\n");
                 scelta = Console.ReadKey(true).KeyChar;
@@ -86,10 +87,10 @@ namespace FormulaOneConsole
                     case 'r':
                         bool OK;
 
-                        if (constraints)
-                            callDropTable("deleteConstraints");
+                        OK= callExecuteSqlScript("deleteConstraints");
+                        constraints = false;
 
-                        OK = callDropTable("Countries");
+                        if (OK) OK = callDropTable("Countries");
                         if (OK) OK = callDropTable("Team");
                         if (OK) OK = callDropTable("Driver");
                         if (OK) OK = callDropTable("Circuit");
@@ -109,6 +110,24 @@ namespace FormulaOneConsole
                         }
                         if (OK)
                             Console.WriteLine("RESET DB OK");
+                        break;
+                    case 'C':
+                    case 'c':
+                        dbt.Backup();
+
+                        bool cl;
+
+                        cl = callExecuteSqlScript("deleteConstraints");
+                        constraints = false;
+
+                        if (cl) cl = callDropTable("Countries");
+                        if (cl) cl = callDropTable("Team");
+                        if (cl) cl = callDropTable("Driver");
+                        if (cl) cl = callDropTable("Circuit");
+                        if (cl) cl = callDropTable("Race");
+                        if (cl) cl = callDropTable("Result");
+                        if (cl)
+                            Console.WriteLine("CLEAR DB OK\n");
                         break;
                     case 'X': break;
 
