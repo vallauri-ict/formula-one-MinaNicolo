@@ -7,7 +7,7 @@
 - DLL: simple utils with all tools necessary to interact with database.
 
 
-##CLI EXAMPLE CODE
+## CLI EXAMPLE CODE
 
 ```javascript
 public static bool callExecuteSqlScript(string scriptName)
@@ -25,11 +25,11 @@ public static bool callExecuteSqlScript(string scriptName)
     }
 }
 ```
-#CLI INTERFACE
+# CLI INTERFACE
 ![image](./Data/img/CLIimage.png)
 
 
-###DLL EXAMPLE CODE
+### DLL EXAMPLE CODE
 ```javascript
 public void DropTable(string tableName)
 {
@@ -48,7 +48,7 @@ public void DropTable(string tableName)
 }
 ```
 
-###ASP.NET EXAMPLE CODE
+### ASP.NET EXAMPLE CODE
 ```javascript
 protected void Page_Load(object sender, EventArgs e)
 {
