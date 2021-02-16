@@ -44,6 +44,7 @@ namespace FormulaOneDLL
             string finalMessage = nErr == 0 ? "Script completed without error" : "Script completed with " + nErr + " ERRORS";
             con.Close();
         }
+
         public void DropTable(string tableName)
         {
             SqlConnection con = new SqlConnection(CONNECTION_STRING);
@@ -168,6 +169,165 @@ namespace FormulaOneDLL
             con.Close();
             da.Dispose();
             return tableData;
+        }
+
+        public List<Country> GetListCountry(bool flag, string isoCode)
+        {
+            List<Country> retVal = new List<Country>();
+            string sql;
+            using (SqlConnection dbConn = new SqlConnection())
+            {
+                dbConn.ConnectionString = CONNECTION_STRING;
+                dbConn.Open();
+                if(!flag)
+                    sql = "SELECT * FROM Countries;";
+                else
+                    sql = $"SELECT * FROM Countries WHERE countryCode = '{isoCode}';";
+
+                SqlCommand cmd = new SqlCommand(sql, dbConn);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    string countryCode = reader.GetString(0);
+                    string countryName = reader.GetString(1);
+                    Country c = new Country(countryCode, countryName);
+                    retVal.Add(c);
+                }
+            }
+            return retVal;
+        }
+        
+        public List<Team> GetListTeams(bool flag,string tCode)
+        {
+            List<Team> retVal = new List<Team>();
+            string sql;
+            using (SqlConnection dbConn = new SqlConnection())
+            {
+                dbConn.ConnectionString = CONNECTION_STRING;
+                dbConn.Open();
+                if(!flag)
+                    sql = "SELECT * FROM Team;";
+                else
+                    sql = $"SELECT * FROM Team WHERE teamCode='{tCode}';";
+
+                SqlCommand cmd = new SqlCommand(sql, dbConn);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    string teamCode = reader.GetString(0);
+                    string teamFullName = reader.GetString(1);
+                    string teamChief = reader.GetString(2);
+                    string teamPowerUnit = reader.GetString(3);
+                    string teamBase = reader.GetString(4);
+                    string countryCode = reader.GetString(5);
+                    string logo = reader.GetString(6);
+                    string img = reader.GetString(7);
+                    Team t = new Team(teamCode,teamFullName,teamChief,teamPowerUnit,
+                        teamBase,countryCode,logo,img);
+                    retVal.Add(t);
+                }
+            }
+            return retVal;
+        }
+        public List<Driver> GetListDriver(bool flag, int driverNum)
+        {
+            List<Driver> retVal = new List<Driver>();
+            string sql;
+            using (SqlConnection dbConn = new SqlConnection())
+            {
+                dbConn.ConnectionString = CONNECTION_STRING;
+                dbConn.Open();
+                if (!flag)
+                    sql = "SELECT * FROM Driver;";
+                else
+                    sql = $"SELECT * FROM Driver WHERE driverNumber = {driverNum};";
+
+                SqlCommand cmd = new SqlCommand(sql, dbConn);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    int driverNumber = reader.GetInt32(0);
+                    string driverName = reader.GetString(1);
+                    string driverSurname = reader.GetString(2);
+                    string teamCode = reader.GetString(3);
+                    string countryCode = reader.GetString(4);
+                    string img = reader.GetString(5);
+                    Driver d = new Driver(driverNumber, driverName, driverSurname,
+                        teamCode,countryCode,img);
+                    retVal.Add(d);
+                }
+            }
+            return retVal;
+        }
+
+        public List<Race> GetListRace(bool flag, int idRace)
+        {
+            List<Race> retVal = new List<Race>();
+            string sql;
+            using (SqlConnection dbConn = new SqlConnection())
+            {
+                dbConn.ConnectionString = CONNECTION_STRING;
+                dbConn.Open();
+                if (!flag)
+                    sql = "SELECT * FROM Race;";
+                else
+                    sql = $"SELECT * FROM Race WHERE idRace = {idRace};";
+
+                SqlCommand cmd = new SqlCommand(sql, dbConn);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    int id_Race = reader.GetInt32(0);
+                    string nameRace = reader.GetString(1);
+                    string circuitId = reader.GetString(2);
+                    Race r = new Race(id_Race, nameRace, circuitId);
+                    retVal.Add(r);
+                }
+            }
+            return retVal;
+        }
+
+        public List<Circuit> GetListCircuit(bool flag, string circuitId)
+        {
+            List<Circuit> retVal = new List<Circuit>();
+            string sql;
+            using (SqlConnection dbConn = new SqlConnection())
+            {
+                dbConn.ConnectionString = CONNECTION_STRING;
+                dbConn.Open();
+                if (!flag)
+                    sql = "SELECT * FROM Circuit;";
+                else
+                    sql = $"SELECT * FROM Circuit WHERE circuitId = '{circuitId}';";
+
+                SqlCommand cmd = new SqlCommand(sql, dbConn);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    string circuit_Id = reader.GetString(0);
+                    string circuitName = reader.GetString(1);
+                    string circuitNation = reader.GetString(2);
+                    int turnNumber = reader.GetInt32(3);
+                    int circuitLength = reader.GetInt32(4);
+                    string fastestLap = reader.GetString(5);
+                    string thumbnailImg = reader.GetString(6);
+                    string descriptionImg = reader.GetString(7);
+                    Circuit c = new Circuit(circuit_Id, circuitName, circuitNation,
+                        turnNumber, circuitLength, fastestLap, thumbnailImg, descriptionImg);
+                    retVal.Add(c);
+                }
+            }
+            return retVal;
         }
     }
 }
