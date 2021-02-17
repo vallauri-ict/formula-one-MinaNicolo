@@ -329,5 +329,40 @@ namespace FormulaOneDLL
             }
             return retVal;
         }
+
+        public List<Result> GetListResult(bool flag, int id)
+        {
+            List<Result> retVal = new List<Result>();
+            string sql;
+            using (SqlConnection dbConn = new SqlConnection())
+            {
+                dbConn.ConnectionString = CONNECTION_STRING;
+                dbConn.Open();
+                if (!flag)
+                    sql = "SELECT * FROM Result;";
+                else
+                    sql = $"SELECT * FROM Result WHERE id = {id};";
+
+                SqlCommand cmd = new SqlCommand(sql, dbConn);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    int idResult = reader.GetInt32(0);
+                    int raceId = reader.GetInt32(1);
+                    int driverId = reader.GetInt32(2);
+                    string teamId = reader.GetString(3);
+                    string driverTime = reader.GetString(4);
+                    int driverPosition = reader.GetInt32(5);
+                    int driverLaps = reader.GetInt32(6);
+                    int driverFastestLap = reader.GetInt32(7);
+                    Result r = new Result(idResult, raceId, driverId,
+                        teamId, driverTime, driverPosition, driverLaps, driverFastestLap);
+                    retVal.Add(r);
+                }
+            }
+            return retVal;
+        }
     }
 }

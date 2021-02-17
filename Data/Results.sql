@@ -3,7 +3,7 @@ CREATE TABLE [Result] (
   [raceid] int,
   [driverId] int NOT NULL,
   [teamId] char(3) NOT NULL,
-  [driverTime] varchar(255) DEFAULT (null),
+  [driverTime] varchar(255),
   [driverPosition] int DEFAULT (0),
   [driverLaps] int DEFAULT (0),
   [driverFastestLap] int DEFAULT (0),
@@ -21,12 +21,12 @@ INSERT INTO [Result] VALUES(8,1,3,'RBR','1:30:73.195',8,71,64);
 INSERT INTO [Result] VALUES(9,1,7,'ARR','1:30:76.885',9,71,70);
 INSERT INTO [Result] VALUES(10,1,10,'ATR','1:30:80.245',10,71,71);
 INSERT INTO [Result] VALUES(11,1,6,'WLR','1:30:87.389',11,71,63);
-INSERT INTO [Result] VALUES(12,1,31,'REN',null,12,69,50);
-INSERT INTO [Result] VALUES(13,1,23,'RBR',null,13,67,50);
-INSERT INTO [Result] VALUES(14,1,26,'ATR',null,0,53,48);
-INSERT INTO [Result] VALUES(15,1,20,'HAS',null,0,49,49);
-INSERT INTO [Result] VALUES(16,1,8,'HAS',null,0,49,46);
-INSERT INTO [Result] VALUES(17,1,63,'WLR',null,0,24,23);
-INSERT INTO [Result] VALUES(18,1,18,'RPT',null,0,20,4);
-INSERT INTO [Result] VALUES(19,1,16,'FER',null,0,17,8);
-INSERT INTO [Result] VALUES(20,1,33,'RBR',null,0,11,5);
+INSERT INTO [Result] VALUES(12,1,31,'REN','0',12,69,50);
+INSERT INTO [Result] VALUES(13,1,23,'RBR','0',13,67,50);
+INSERT INTO [Result] VALUES(14,1,26,'ATR','0',0,53,48);
+INSERT INTO [Result] VALUES(15,1,20,'HAS','0',0,49,49);
+INSERT INTO [Result] VALUES(16,1,8,'HAS','0',0,49,46);
+INSERT INTO [Result] VALUES(17,1,63,'WLR','0',0,24,23);
+INSERT INTO [Result] VALUES(18,1,18,'RPT','0',0,20,4);
+INSERT INTO [Result] VALUES(19,1,16,'FER','0',0,17,8);
+INSERT INTO [Result] VALUES(20,1,33,'RBR','0',0,11,5);
