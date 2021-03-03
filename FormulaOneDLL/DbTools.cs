@@ -45,6 +45,7 @@ namespace FormulaOneDLL
             con.Close();
         }
 
+
         public void DropTable(string tableName)
         {
             SqlConnection con = new SqlConnection(CONNECTION_STRING);
@@ -171,18 +172,13 @@ namespace FormulaOneDLL
             return tableData;
         }
 
-        public List<Country> GetListCountry(bool flag, string isoCode)
+        public List<Country> GetListCountry(string sql)
         {
             List<Country> retVal = new List<Country>();
-            string sql;
             using (SqlConnection dbConn = new SqlConnection())
             {
                 dbConn.ConnectionString = CONNECTION_STRING;
                 dbConn.Open();
-                if(!flag)
-                    sql = "SELECT * FROM Countries;";
-                else
-                    sql = $"SELECT * FROM Countries WHERE countryCode = '{isoCode}';";
 
                 SqlCommand cmd = new SqlCommand(sql, dbConn);
 
@@ -199,18 +195,13 @@ namespace FormulaOneDLL
             return retVal;
         }
         
-        public List<Team> GetListTeams(bool flag,string tCode)
+        public List<Team> GetListTeams(string sql)
         {
             List<Team> retVal = new List<Team>();
-            string sql;
             using (SqlConnection dbConn = new SqlConnection())
             {
                 dbConn.ConnectionString = CONNECTION_STRING;
                 dbConn.Open();
-                if(!flag)
-                    sql = "SELECT * FROM Team;";
-                else
-                    sql = $"SELECT * FROM Team WHERE teamCode='{tCode}';";
 
                 SqlCommand cmd = new SqlCommand(sql, dbConn);
 
@@ -233,18 +224,13 @@ namespace FormulaOneDLL
             }
             return retVal;
         }
-        public List<Driver> GetListDriver(bool flag, int driverNum)
+        public List<Driver> GetListDriver(string sql)
         {
             List<Driver> retVal = new List<Driver>();
-            string sql;
             using (SqlConnection dbConn = new SqlConnection())
             {
                 dbConn.ConnectionString = CONNECTION_STRING;
                 dbConn.Open();
-                if (!flag)
-                    sql = "SELECT * FROM Driver;";
-                else
-                    sql = $"SELECT * FROM Driver WHERE driverNumber = {driverNum};";
 
                 SqlCommand cmd = new SqlCommand(sql, dbConn);
 
@@ -255,29 +241,24 @@ namespace FormulaOneDLL
                     int driverNumber = reader.GetInt32(0);
                     string driverName = reader.GetString(1);
                     string driverSurname = reader.GetString(2);
-                    string teamCode = reader.GetString(3);
+                    string tCode = reader.GetString(3);
                     string countryCode = reader.GetString(4);
                     string img = reader.GetString(5);
                     Driver d = new Driver(driverNumber, driverName, driverSurname,
-                        teamCode,countryCode,img);
+                        tCode,countryCode,img);
                     retVal.Add(d);
                 }
             }
             return retVal;
         }
 
-        public List<Race> GetListRace(bool flag, int idRace)
+        public List<Race> GetListRace(string sql)
         {
             List<Race> retVal = new List<Race>();
-            string sql;
             using (SqlConnection dbConn = new SqlConnection())
             {
                 dbConn.ConnectionString = CONNECTION_STRING;
                 dbConn.Open();
-                if (!flag)
-                    sql = "SELECT * FROM Race;";
-                else
-                    sql = $"SELECT * FROM Race WHERE idRace = {idRace};";
 
                 SqlCommand cmd = new SqlCommand(sql, dbConn);
 
@@ -295,18 +276,13 @@ namespace FormulaOneDLL
             return retVal;
         }
 
-        public List<Circuit> GetListCircuit(bool flag, string circuitId)
+        public List<Circuit> GetListCircuit(string sql)
         {
             List<Circuit> retVal = new List<Circuit>();
-            string sql;
             using (SqlConnection dbConn = new SqlConnection())
             {
                 dbConn.ConnectionString = CONNECTION_STRING;
                 dbConn.Open();
-                if (!flag)
-                    sql = "SELECT * FROM Circuit;";
-                else
-                    sql = $"SELECT * FROM Circuit WHERE circuitId = '{circuitId}';";
 
                 SqlCommand cmd = new SqlCommand(sql, dbConn);
 
@@ -330,18 +306,13 @@ namespace FormulaOneDLL
             return retVal;
         }
 
-        public List<Result> GetListResult(bool flag, int id)
+        public List<Result> GetListResult(string sql)
         {
             List<Result> retVal = new List<Result>();
-            string sql;
             using (SqlConnection dbConn = new SqlConnection())
             {
                 dbConn.ConnectionString = CONNECTION_STRING;
                 dbConn.Open();
-                if (!flag)
-                    sql = "SELECT * FROM Result;";
-                else
-                    sql = $"SELECT * FROM Result WHERE id = {id};";
 
                 SqlCommand cmd = new SqlCommand(sql, dbConn);
 
@@ -360,6 +331,69 @@ namespace FormulaOneDLL
                     Result r = new Result(idResult, raceId, driverId,
                         teamId, driverTime, driverPosition, driverLaps, driverFastestLap);
                     retVal.Add(r);
+                }
+            }
+            return retVal;
+        }
+        public List<Driver> GetDriverDetails(string field, string value)
+        {
+            List<Driver> retVal = new List<Driver>();
+            string sql;
+            using (SqlConnection dbConn = new SqlConnection())
+            {
+                dbConn.ConnectionString = CONNECTION_STRING;
+                dbConn.Open();
+
+                sql = $"SELECT * FROM Driver WHERE {field} = '{value}';";
+
+                SqlCommand cmd = new SqlCommand(sql, dbConn);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    int driverNumber = reader.GetInt32(0);
+                    string driverName = reader.GetString(1);
+                    string driverSurname = reader.GetString(2);
+                    string tCode = reader.GetString(3);
+                    string countryCode = reader.GetString(4);
+                    string img = reader.GetString(5);
+                    Driver d = new Driver(driverNumber, driverName, driverSurname,
+                        tCode,countryCode, img);
+                    retVal.Add(d);
+                }
+            }
+            return retVal;
+        }
+
+        public List<Team> GetTeamDetails(string field, string value)
+        {
+            List<Team> retVal = new List<Team>();
+            string sql;
+            using (SqlConnection dbConn = new SqlConnection())
+            {
+                dbConn.ConnectionString = CONNECTION_STRING;
+                dbConn.Open();
+                
+                sql = $"SELECT * FROM Team WHERE {field}='{value}';";
+
+                SqlCommand cmd = new SqlCommand(sql, dbConn);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    string teamCode = reader.GetString(0);
+                    string teamFullName = reader.GetString(1);
+                    string teamChief = reader.GetString(2);
+                    string teamPowerUnit = reader.GetString(3);
+                    string teamBase = reader.GetString(4);
+                    string countryCode = reader.GetString(5);
+                    string logo = reader.GetString(6);
+                    string img = reader.GetString(7);
+                    Team t = new Team(teamCode, teamFullName, teamChief, teamPowerUnit,
+                        teamBase, countryCode, logo, img);
+                    retVal.Add(t);
                 }
             }
             return retVal;

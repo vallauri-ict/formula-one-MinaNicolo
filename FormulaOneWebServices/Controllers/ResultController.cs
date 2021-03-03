@@ -13,20 +13,19 @@ namespace FormulaOneWebServices.Controllers
     [ApiController]
     public class ResultController : ControllerBase
     {
+        DbTools db = new DbTools();
         // GET: api/<ResultController>
         [HttpGet]
-        public List<Result> Get()
+        public List<Result> GetAllResults()
         {
-            DbTools db = new DbTools();
-            return db.GetListResult(false, 0);
+            return db.GetListResult("SELECT * FROM Result;");
         }
 
         // GET api/<ResultController>/5
         [HttpGet("{id}")]
-        public List<Result> Get(int id)
+        public List<Result> GetOneResult(int id)
         {
-            DbTools db = new DbTools();
-            return db.GetListResult(true, id);
+            return db.GetListResult($"SELECT * FROM Result WHERE id = {id};");
         }
 
         // POST api/<ResultController>

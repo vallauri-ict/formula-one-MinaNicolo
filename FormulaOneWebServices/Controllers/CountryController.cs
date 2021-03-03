@@ -13,20 +13,19 @@ namespace FormulaOneWebServices
     [ApiController]
     public class CountryController : ControllerBase
     {
+        DbTools db = new DbTools();
         // GET: api/<CountryController>
         [HttpGet]
-        public List<Country> Get()
+        public List<Country> GetAllCountries()
         {
-            DbTools db = new DbTools();
-            return db.GetListCountry(false, null);
+            return db.GetListCountry("SELECT * FROM Countries;");
         }
 
         // GET api/<CountryController>/5
         [HttpGet("{isoCode}")]
-        public List<Country> Get(string isoCode)
+        public List<Country> GetOneCountry(string isoCode)
         {
-            DbTools db = new DbTools();
-            return db.GetListCountry(true, isoCode);
+            return db.GetListCountry($"SELECT * FROM Countries WHERE countryCode = '{isoCode.ToUpper()}';");
         }
 
         // POST api/<CountryController>

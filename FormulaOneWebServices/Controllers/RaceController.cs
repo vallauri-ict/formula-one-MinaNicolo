@@ -13,20 +13,19 @@ namespace FormulaOneWebServices.Controllers
     [ApiController]
     public class RaceController : ControllerBase
     {
+        DbTools db = new DbTools();
         // GET: api/<RaceController>
         [HttpGet]
-        public List<Race> Get()
+        public List<Race> GetAllRaces()
         {
-            DbTools db = new DbTools();
-            return db.GetListRace(false, 0);
+            return db.GetListRace("SELECT * FROM Race;");
         }
 
         // GET api/<RaceController>/5
         [HttpGet("{idRace}")]
-        public List<Race> Get(int idRace)
+        public List<Race> GetOneRace(int idRace)
         {
-            DbTools db = new DbTools();
-            return db.GetListRace(true, idRace);
+            return db.GetListRace($"SELECT * FROM Race WHERE idRace = {idRace};");
         }
 
         // POST api/<RaceController>

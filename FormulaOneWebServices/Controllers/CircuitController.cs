@@ -9,28 +9,44 @@ using FormulaOneDLL;
 
 namespace FormulaOneWebServices.Controllers
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
     [ApiController]
     public class CircuitController : ControllerBase
     {
+        DbTools db = new DbTools();
         // GET: api/<CircuitController>
+        [Route("")]
+        [Route("api/circuits")]
         [HttpGet]
-        public List<Circuit> Get()
+        public List<Circuit> GetAllCircuits()
         {
-            DbTools db = new DbTools();
-            return db.GetListCircuit(false, null);
+            return db.GetListCircuit("SELECT * FROM Circuit;");
         }
 
         // GET api/<CircuitController>/5
+        [Route("api/circuits/{circuitId}")]
         [HttpGet("{circuitId}")]
-        public List<Circuit> Get(string circuitId)
+        public List<Circuit> GetOneCirtuit(string circuitId)
         {
-            DbTools db = new DbTools();
-            return db.GetListCircuit(true, circuitId);
+            return db.GetListCircuit($"SELECT * FROM Circuit WHERE circuitId = '{circuitId}';");
         }
 
+        [Route("dto/circuits/")]
+        [HttpGet]
+        public List<DTO.CircuitsDTO> GetDetails()
+        {
+            List<DTO.CircuitsDTO> circuitList = new List<DTO.CircuitsDTO>();
+            foreach (var circuit in db.GetListCircuit("SELECT * FROM Circuit"))
+            {
+                circuitList.Add(new DTO.CircuitsDTO(circuit.circuitName, circuit.circuitNation,
+                    circuit.thumbnailImg));
+            }
+            return circuitList;
+        }
+
+
         // POST api/<CircuitController>
-        [HttpPost]
+        /*[HttpPost]
         public void Post([FromBody] string value)
         {
         }
@@ -45,6 +61,6 @@ namespace FormulaOneWebServices.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-        }
+        }*/
     }
 }
