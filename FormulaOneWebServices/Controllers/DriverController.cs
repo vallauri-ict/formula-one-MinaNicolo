@@ -52,14 +52,16 @@ namespace FormulaOneWebServices
             List<DTO.DriverDetailsDTO> driverList = new List<DTO.DriverDetailsDTO>();
             foreach (var driver in db.GetListDriver("SELECT * FROM Driver"))
             {
+                var country = db.GetListCountry($"SELECT * FROM Countries WHERE countryCode='{driver.countryCode}';");
                 driverList.Add(new DTO.DriverDetailsDTO(
                     driver.driverNumber, 
                     driver.driverName,
                     driver.driverSurname, 
                     driver.img,
                     db.GetListTeams($"SELECT * FROM Team WHERE teamCode='{driver.teamCode}';")[0].teamFullName,
-                    db.GetListCountry($"SELECT * FROM Countries WHERE countryCode='{driver.countryCode}';")[0].countryName,
-                    0));
+                    country[0].countryName,
+                    country[0].countryCode,
+                    driver.points));
             }
             return driverList;
         }

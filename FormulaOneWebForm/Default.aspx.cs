@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -19,6 +21,7 @@ namespace FormulaOneWebForm
                 List<string> Tablenames = DbTools.GetTables();
                 DropDownList1.DataSource = Tablenames;
                 DropDownList1.DataBind();
+                GetCountry();
             }
             else
             {
@@ -31,6 +34,29 @@ namespace FormulaOneWebForm
             DbTools dbt = new DbTools();
             GridViewTable.DataSource = dbt.GetData(DropDownList1.SelectedValue);
             GridViewTable.DataBind();
+        }
+
+        private void GetCountry(string isoCode="")
+        {
+            HttpWebRequest apiRequest = WebRequest.Create("https://localhost:5001/api/country" + isoCode+"") as HttpWebRequest;
+            string apiResponse = "";
+
+            try
+            {
+                using(HttpWebResponse response = apiRequest.GetResponse() as HttpWebResponse)
+                {
+                    StreamReader reader = new StreamReader(response.GetResponseStream());
+                    apiResponse = reader.ReadToEnd();
+                    Country[] oCountry = Newtonsoft.Json.JsonConvert.DeserializeObject<Country[]>(apiResponse);
+                    lbxNazioni.DataSource = oCountry;
+                    lbxNazioni.DataBind();
+                    lbxNazioni.Visible = true;
+                }
+            }
+            catch (System.Net.WebException ex)
+            {
+                Console.Write(ex.Message);
+            }
         }
     }
 }

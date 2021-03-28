@@ -44,6 +44,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -93,6 +96,10 @@
     <ProjectReference Include="..\FormulaOneDLL\FormulaOneDLL.csproj">
       <Project>{276ec545-11d5-467c-beaf-d022bda6a6a2}</Project>
       <Name>FormulaOneDLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FormulaOneWebServices\FormulaOneWebServices.csproj">
+      <Project>{a0527aef-5cea-4adc-8cb4-d5f743a6ab60}</Project>
+      <Name>FormulaOneWebServices</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

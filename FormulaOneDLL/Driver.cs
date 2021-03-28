@@ -14,9 +14,9 @@ namespace FormulaOneDLL
         public string teamCode { get; set; }
         public string countryCode { get; set; }
         public string img { get; set; }
-
+        public int points { get; set; }
         public Driver(int dn, string dName, string dSurname,
-            string tc, string cc, string img)
+            string tc, string cc, string img, int points)
         {
             this.driverNumber = dn;
             this.driverName = dName;
@@ -24,6 +24,7 @@ namespace FormulaOneDLL
             this.teamCode = tc;
             this.countryCode = cc;
             this.img = img;
+            this.points = points;
         }
     }
 }

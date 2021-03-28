@@ -13,11 +13,17 @@ namespace FormulaOneWebServices.DTO
         public string driverSurname { get; set; }
         public string img { get; set; }
         public string teamName { get; set; }
+        public string countryCode { get; set; }
         public string countryName { get; set; }
-        public int podiums { get; set; }
+        //public int podiums { get; set; }
+        public int points { get; set; }
+        public string countryFlag
+        {
+            get { return String.Format("https://www.countryflags.io/{0}/flat/64.png", countryCode); }
+        }
 
         public DriverDetailsDTO(int driverNumber, string driverName, string driverSurname, string img, string teamName,
-            string countryName, int podiums)
+            string countryName, string countryCode, int points)
         {
             this.driverNumber = driverNumber;
             this.driverName = driverName;
@@ -25,7 +31,9 @@ namespace FormulaOneWebServices.DTO
             this.img = img;
             this.teamName = teamName;
             this.countryName = countryName;
-            this.podiums = podiums;
+            this.countryCode = countryCode;
+            //this.podiums = podiums;
+            this.points = points;
         }
     }
 }

@@ -13,6 +13,10 @@ namespace FormulaOneWebServices.DTO
         public string countryCode { get; set; }
         public string img { get; set; }
         public string teamName { get; set; }
+        public string countryFlag
+        {
+            get{return String.Format("https://www.countryflags.io/{0}/flat/64.png", countryCode);}
+        }
 
         public DriverDTO(int driverNumber, string driverName, string driverSurname,
             string countryCode, string img, string t)

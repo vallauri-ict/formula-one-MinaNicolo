@@ -35,6 +35,9 @@
                 <headerstyle backcolor="White"
                         forecolor="Black"/>
             </asp:GridView>
+            <asp:ListBox runat="server" ID="lbxNazioni">
+                
+            </asp:ListBox>
         </div>
     </form>
 </body>

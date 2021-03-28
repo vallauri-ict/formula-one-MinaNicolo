@@ -29,6 +29,7 @@ namespace FormulaOneConsole
                 Console.WriteLine("6 - Create Results");
                 Console.WriteLine("7 - Create Constraints");
                 Console.WriteLine("8 - Delete Constraints");
+                Console.WriteLine("9 - Create Stats");
                 Console.WriteLine("------------------");
                 Console.WriteLine("R - RESET DB");
                 Console.WriteLine("B - Backup all DB");
@@ -74,6 +75,11 @@ namespace FormulaOneConsole
                         }
                         else
                             Console.WriteLine("\nThere aren't constraints set\n");
+                        break;
+                    case '9':
+                        Console.Write("\nInserisci driver id: ");
+                        int id = Convert.ToInt32(Console.ReadLine());
+                        dbt.callStoredProcedure(id);
                         break;
                     case 'B':
                     case 'b':
@@ -137,7 +143,6 @@ namespace FormulaOneConsole
                 }
             } while (scelta != 'X' && scelta != 'x');
         }
-
 
         static bool callDropTable(string tableName)
         {

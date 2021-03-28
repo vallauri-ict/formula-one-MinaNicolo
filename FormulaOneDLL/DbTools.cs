@@ -107,6 +107,26 @@ namespace FormulaOneDLL
             }
         }
 
+        public void callStoredProcedure(int number)
+        {
+            string sql = "ProcedureStats";
+            SqlConnection con = new SqlConnection(CONNECTION_STRING);
+            con.Open();
+            SqlCommand cmd = new SqlCommand(sql, con);
+            SqlParameter driverId = new SqlParameter();
+            driverId.ParameterName = "driverId";
+            driverId.Direction = ParameterDirection.Input;
+            driverId.DbType = DbType.String;
+            driverId.Value = number;
+            cmd.Parameters.Add(driverId);
+
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            int ris = cmd.ExecuteNonQuery();
+
+            Console.WriteLine($"Risultato: {ris}");
+        }
+
         public void Restore()
         {
             try
@@ -244,8 +264,9 @@ namespace FormulaOneDLL
                     string tCode = reader.GetString(3);
                     string countryCode = reader.GetString(4);
                     string img = reader.GetString(5);
+                    int points = reader.GetInt32(6);
                     Driver d = new Driver(driverNumber, driverName, driverSurname,
-                        tCode,countryCode,img);
+                        tCode,countryCode,img,points);
                     retVal.Add(d);
                 }
             }
@@ -358,8 +379,9 @@ namespace FormulaOneDLL
                     string tCode = reader.GetString(3);
                     string countryCode = reader.GetString(4);
                     string img = reader.GetString(5);
+                    int points = reader.GetInt32(6);
                     Driver d = new Driver(driverNumber, driverName, driverSurname,
-                        tCode,countryCode, img);
+                        tCode,countryCode, img, points);
                     retVal.Add(d);
                 }
             }
